@@ -14,7 +14,13 @@ import org.apache.flink.api.java.ExecutionEnvironment;
 import org.apache.flink.api.java.DataSet;
 import org.apache.flink.api.java.tuple.Tuple1;
 import org.apache.flink.api.java.tuple.Tuple2;
+import org.apache.flink.api.java.tuple.Tuple4;
 import org.apache.flink.api.java.tuple.Tuple5;
+
+import java.util.Calendar;
+import java.sql.Timestamp;
+import java.util.Date;
+import java.text.SimpleDateFormat;
 
 public class DepartureDelay {
 	
@@ -61,10 +67,14 @@ public class DepartureDelay {
 	    		   delayed.join(us_airlines).where(0).equalTo(0).projectFirst(0,1,2).projectSecond(1,2);
 	    //DataSet<Tuple2<Tuple3<String, String, String>, Tuple3<String, String, String>>> joinresult =
 	    //	       delayed.join(us_airlines).where(0).equalTo(0).project(0,1);
+	    
+	    DataSet<Tuple4<String,Integer,String,String>> time_diff = joinresult.project(0,1,3,4);
+	    
+
 	
 	    
 	    
-	    joinresult
+	    time_diff
 	    .writeAsText(output_filepath, WriteMode.OVERWRITE);
 	    env.execute("Executing");
 		
